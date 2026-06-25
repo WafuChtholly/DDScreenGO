@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        :root {
+            --primary: #FF6699; /* B站粉色 */
+            --bg-color: #121212;
+        }
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color);
+            color: #fff;
+            min-width: max-content;
+        }
+        .container {
+            position: relative;
+            width: 850px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .bg-blur {
+            position: absolute;
+            top: -30px; left: -30px; right: -30px; bottom: -30px;
+            background-image: url('{{.CoverBase64}}');
+            background-size: cover;
+            background-position: center;
+            filter: blur(25px) brightness(0.3);
+            z-index: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 35px;
+            display: flex;
+            gap: 30px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .cover-box {
+            position: relative;
+            width: 380px;
+            height: 214px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            border: 2px solid rgba(255, 102, 153, 0.4);
+            flex-shrink: 0;
+        }
+        .cover-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .live-badge-overlay {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: linear-gradient(90deg, #FF6699, #ff3377);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 14px;
+            letter-spacing: 1.5px;
+            box-shadow: 0 4px 15px rgba(255, 102, 153, 0.5);
+            text-transform: uppercase;
+        }
+        .info-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        .title {
+            font-size: 26px;
+            font-weight: bold;
+            line-height: 1.4;
+            margin: 0 0 20px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .author-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: auto;
+        }
+        .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 20px rgba(255, 102, 153, 0.4);
+            object-fit: cover;
+        }
+        .author-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .author-name {
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .room-id {
+            font-size: 14px;
+            color: #ccc;
+            background: rgba(0,0,0,0.5);
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            width: fit-content;
+        }
+        .stats-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(0,0,0,0.4);
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-top: 15px;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ddd;
+            font-size: 15px;
+        }
+        .stat-item span {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .qr-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .qr-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .qr-text {
+            font-size: 13px;
+            color: #bbb;
+            font-weight: 500;
+        }
+        .footer {
+            margin-top: 24px;
+            text-align: right;
+            font-size: 14px;
+            color: #666;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 毛玻璃背景 -->
+        <div class="bg-blur"></div>
+        
+        <div class="content">
+            <!-- 左侧封面 -->
+            <div class="cover-box">
+                <img class="cover-img" src="{{.CoverBase64}}" />
+                {{if .IsLive}}
+                <div class="live-badge-overlay">LIVE NOW</div>
+                {{else}}
+                <div class="live-badge-overlay" style="background: #555; box-shadow: none;">OFFLINE</div>
+                {{end}}
+            </div>
+            
+            <!-- 右侧信息 -->
+            <div class="info-box">
+                <h2 class="title">{{.Info.Title}}</h2>
+                
+                <div class="author-box">
+                    <img class="avatar" src="{{.AvatarBase64}}" />
+                    <div class="author-info">
+                        <div class="author-name">{{if .Info.Nickname}}{{.Info.Nickname}}{{else}}{{.Info.Author}}{{end}}</div>
+                        <div class="room-id">Bilibili 房间号: {{.Info.RoomID}}</div>
+                    </div>
+                </div>
+                
+                <div class="stats-row">
+                    <div class="stat-item">
+                        分区: <span>{{.Info.Category}}</span>
+                    </div>
+                    {{if .IsLive}}
+                    <div class="stat-item">
+                        人气/粉丝: <span>{{.Info.FollowerNum}}</span>
+                    </div>
+                    {{else}}
+                    <div class="stat-item">
+                        {{.DurationLabel}} <span>{{.Duration}}</span>
+                    </div>
+                    {{end}}
+                </div>
+            </div>
+
+            <!-- 二维码 -->
+            {{if .QRBase64}}
+            <div class="qr-section">
+                <img class="qr-img" src="{{.QRBase64}}" />
+                <div class="qr-text">扫码直达直播间</div>
+            </div>
+            {{end}}
+        </div>
+    </div>
+    <div class="footer">DDScreenGO Premium Interface // bililive4 | {{.GeneratedAt}}</div>
+</body>
+</html>

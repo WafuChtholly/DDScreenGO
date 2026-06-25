@@ -1,0 +1,14 @@
+.gocache/
+logs/
+ScreenShotImg/
+ChromeProfile/
+bin/
+build/
+*_Cookies.json
+Douyin_Cookie.txt
+Douyin_Cache.json
+dd-screen-go.exe
+dd-screen-go
+appsettings.json
+*.exe
+*.json
